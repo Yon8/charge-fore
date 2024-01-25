@@ -2,7 +2,6 @@
 
 import Table from "@/components/Table.vue";
 import {reactive} from "vue";
-import axios from "axios";
 
 const data = reactive({
     column: [{
@@ -22,7 +21,7 @@ const data = reactive({
         prop: 'status',
     }, {
         label: '充电站管理员',
-        prop: 'warden',
+        prop: 'wardenName',
     }],
     formData: {
         id: '',
