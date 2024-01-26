@@ -5,21 +5,30 @@ import Table from "@/components/Table.vue";
 
 const data = reactive({
     column: [{
+        type: 'hidden',
         label: '管理员编号',
         prop: 'id',
     }, {
+        type: 'label',
         label: '管理员名称',
         prop: 'name',
     }, {
+        type: 'label',
         label: '密码',
         prop: 'password',
     }, {
+        type: 'tag',
         label: '所属站点',
+        /*表格需要展示的属性名*/
         prop: 'stationName',
+        /*对话框需要传值的属性名*/
+        dialogProp: 'station'
     }, {
+        type: 'label',
         label: '电话',
         prop: 'phone',
     }, {
+        type: 'label',
         label: '权限',
         prop: 'authority',
     }],
@@ -39,7 +48,8 @@ const data = reactive({
         addUrl: '/chargeManage/warden/wardenAdd',
         editUrl: '/chargeManage/warden/wardenEdit',
         deleteUrl: '/chargeManage/warden/wardenDelete?id=',
-        deleteMoreUrl:'/chargeManage/warden/wardenDeleteByIds?ids='
+        deleteMoreUrl: '/chargeManage/warden/wardenDeleteByIds?ids=',
+        foreignUrl: '/chargeManage/warden/getStationIdAndName'
     }
 });
 </script>

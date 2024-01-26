@@ -5,23 +5,32 @@ import {reactive} from "vue";
 
 const data = reactive({
     column: [{
+        type: 'hidden',
         label: '充电站编号',
         prop: 'id',
     }, {
+        type: 'label',
         label: '充电站名称',
         prop: 'name',
     }, {
+        type: 'label',
         label: '充电桩数量',
         prop: 'count',
     }, {
+        type: 'label',
         label: '充电站位置',
         prop: 'location',
     }, {
+        type: 'label',
         label: '充电站状态',
         prop: 'status',
     }, {
+        type: 'tag',
         label: '充电站管理员',
+        /*表格需要展示的属性名*/
         prop: 'wardenName',
+        /*对话框需要传值的属性名*/
+        dialogProp: 'warden'
     }],
     formData: {
         id: '',
@@ -39,7 +48,8 @@ const data = reactive({
         addUrl: '/chargeManage/station/stationAdd',
         editUrl: '/chargeManage/station/stationEdit',
         deleteUrl: '/chargeManage/station/stationDelete?id=',
-        deleteMoreUrl:'/chargeManage/station/stationDeleteByIds?ids='
+        deleteMoreUrl: '/chargeManage/station/stationDeleteByIds?ids=',
+        foreignUrl: '/chargeManage/station/getWardenIdAndName'
     },
 
 });

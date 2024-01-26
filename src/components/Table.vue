@@ -37,10 +37,12 @@ const data = reactive({
     dialogVisible: false,
     dialogTitle: '添加',
     multipleSelection: [],
+    foreignData: [],
 });
 onMounted(() => {
     onPage();
     data.formData = JSON.parse(JSON.stringify(props.dialogData));
+    onForeign();
 });
 const onPage = () => {
     data.loading = true;
@@ -123,7 +125,10 @@ const onAdd = () => {
     data.dialogVisible = true;
 };
 const getPlaceholder = (val) => {
-    return '请输入' + val;
+    if (val.type === 'tag') {
+        return '请选择' + val.label;
+    }
+    return '请输入' + val.label;
 }
 const onEdit = (val) => {
 
@@ -215,6 +220,14 @@ const onCurrentChange = (val) => {
     props.page.current = val;
     onPage();
 }
+/**/
+const onForeign = () => {
+    axios.get(props.url.foreignUrl).then((res) => {
+        data.foreignData = res.data.result;
+        console.log(data.foreignData);
+
+    });
+}
 </script>
 
 <template>
@@ -257,9 +270,15 @@ const onCurrentChange = (val) => {
         <div class="dialog-wrap">
             <el-dialog :title="data.dialogTitle" v-model="data.dialogVisible" :show-close="false">
                 <el-form :model="data.formData"  v-for="item in column" status-icon >
-                    <el-form-item   v-if="item.prop !== 'id'" :prop="item.prop" :label="item.label"
+                    <el-form-item   v-if="item.type ==='label'" :prop="item.prop" :label="item.label"
                                   :rules="[{ required: true, message: '请输入' + item.label, trigger: 'blur' }]">
-                        <el-input  v-model="data.formData[item.prop]" :placeholder=getPlaceholder(item.label)></el-input>
+                        <el-input  v-model="data.formData[item.prop]" :placeholder=getPlaceholder(item)></el-input>
+                    </el-form-item>
+                    <el-form-item v-if="item.type === 'tag'" :prop="item.prop" :label="item.label" :rules="[{ required: true, message: '请输入类型', trigger: 'blur' }]">
+                        <el-select v-model="data.formData[item.dialogProp]" :placeholder=getPlaceholder(item) style="width: 100%">
+                            <el-option v-for="item in data.foreignData" :key="item.id" :label="item.name"
+                                       :value="item.id"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
                 <template #footer>
