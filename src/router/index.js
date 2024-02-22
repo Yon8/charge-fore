@@ -26,6 +26,11 @@ const routes = [
         name: "Station",
         meta: { title: "充电站管理" },
         component: () => import('../views/StationManage.vue')
+      },{
+        path: "/stack",
+        name: "Stack",
+        meta: { title: "充电桩管理" },
+        component: () => import('../views/StackManage.vue')
       }
     ],
   }

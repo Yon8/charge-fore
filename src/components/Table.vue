@@ -4,6 +4,7 @@ import axios from "axios";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 const props = defineProps({
+    //分页数据
     page: {
         type: Object,
         default:{
@@ -12,18 +13,29 @@ const props = defineProps({
             total: 0,
         }
     },
+    //table表 列字段数据
     column: {
         type: Array,
         default: []
     },
+    //各方法的请求链接后缀
     url: {
         type: Object,
         default: {},
     },
+    //增加 修改 对话框字段数据
     dialogData: {
         type: Object,
         default: {},
     },
+    //前端处理 将属性数值转换为指定字段需要用到的数据
+    switchData:{
+        type: Object,
+        default: {
+            switchMap: {},
+            formatter: {},
+        },
+    }
 })
 const emit = defineEmits([])
 const data = reactive({
@@ -37,12 +49,16 @@ const data = reactive({
     dialogVisible: false,
     dialogTitle: '添加',
     multipleSelection: [],
-    foreignData: [],
+    foreignData: [], //额外(外键)数据
+    switchData: {},
 });
 onMounted(() => {
+
     onPage();
     data.formData = JSON.parse(JSON.stringify(props.dialogData));
+    data.switchData = JSON.parse(JSON.stringify(props.switchData));
     onForeign();
+    console.log(data)
 });
 const onPage = () => {
     data.loading = true;
@@ -52,11 +68,13 @@ const onPage = () => {
     axios.get(props.url.pageUrl, {params: target, name: data.searchForm.name}).then(response => {
         data.loading = false;
         data.tableData = response.data.result.list;
+        onSwitch();
         props.page.current = response.data.result.pageNum;
         props.page.size = response.data.result.pageSize;
         props.page.total = response.data.result.total;
-        console.log(response.data.result);
+
     });
+
 }
 const beforeUpload = (file) => {
     const extension1 = file.name.split(".")[1] === "xls";
@@ -131,7 +149,6 @@ const getPlaceholder = (val) => {
     return '请输入' + val.label;
 }
 const onEdit = (val) => {
-
     data.dialogTitle = '修改' + props.url.moduleName + '信息';
     data.formData = { ...val };
     console.log(data.formData);
@@ -156,12 +173,19 @@ const onSubmit = () => {
         // 执行操作为 1 的逻辑
         axios.post(props.url.editUrl, data.formData).then((res) => {
             console.log(res);
-            ElMessage.success({
-                message: '修改成功！',
-                type: 'success'
-            });
-            onPage();
-            data.dialogVisible = false;
+            if (res.data.code === 200) {
+                ElMessage.success({
+                    message: '修改成功！',
+                    type: 'success'
+                });
+                onPage();
+                data.dialogVisible = false;
+            } else {
+                ElMessage.error({
+                    message: res.data.message,
+                    type: 'error'
+                });
+            }
         }).catch((err) => {
             console.error(err);
         });
@@ -220,13 +244,29 @@ const onCurrentChange = (val) => {
     props.page.current = val;
     onPage();
 }
-/**/
+/*用于获取额外的数据 如与其他组件共有的外键Map*/
 const onForeign = () => {
     axios.get(props.url.foreignUrl).then((res) => {
         data.foreignData = res.data.result;
         console.log(data.foreignData);
 
     });
+}
+/*前端处理将值转换为字段的通用方法 */
+const onSwitch = () => {
+    //判断父组件是否需要用到此方法
+    if (typeof props.switchData.formatter === 'function') {
+        data.tableData.forEach(row => {
+            props.column.forEach((col) => {
+                //找到父组件是否有需要用到此方法的字段
+                if (col.type === 'switch') {
+                    //将原字段经过处理后 增加Name变成新属性
+                    row[col.dialogProp+ "Name"] = props.switchData.formatter(row);
+                }
+            })
+        });
+        console.log("switch运行了")
+    }
 }
 </script>
 
@@ -251,7 +291,6 @@ const onForeign = () => {
                 <el-table-column type="selection" >
                 </el-table-column>
                 <el-table-column v-for="item in column" :label="item.label" :prop="item.prop" >
-
                 </el-table-column>
                 <el-table-column #default="scope" fixed="right" label="操作" align="center" width="220">
                     <el-button size="small" @click="onEdit(scope.row)">编辑</el-button>
@@ -271,14 +310,32 @@ const onForeign = () => {
             <el-dialog :title="data.dialogTitle" v-model="data.dialogVisible" :show-close="false">
                 <el-form :model="data.formData"  v-for="item in column" status-icon >
                     <el-form-item   v-if="item.type ==='label'" :prop="item.prop" :label="item.label"
-                                  :rules="[{ required: true, message: '请输入' + item.label, trigger: 'blur' }]">
+                                  :rules="[{ required: item.required, message: '请输入' + item.label, trigger: 'blur' }]">
                         <el-input  v-model="data.formData[item.prop]" :placeholder=getPlaceholder(item)></el-input>
                     </el-form-item>
-                    <el-form-item v-if="item.type === 'tag'" :prop="item.prop" :label="item.label" :rules="[{ required: true, message: '请输入类型', trigger: 'blur' }]">
+                    <el-form-item v-if="item.type === 'tag'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
                         <el-select v-model="data.formData[item.dialogProp]" :placeholder=getPlaceholder(item) style="width: 100%">
-                            <el-option v-for="item in data.foreignData" :key="item.id" :label="item.name"
+                            <el-option v-for="item in data.foreignData"
+                                       :label="item.name"
                                        :value="item.id"></el-option>
                         </el-select>
+                    </el-form-item>
+                    <el-form-item v-if="item.type === 'switch'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
+                        <el-select v-model="data.formData[item.dialogProp]" :placeholder=getPlaceholder(item) style="width: 100%">
+                            <!-- parseInt(value) 修复类型不匹配导致对话框值显示不正常             -->
+                            <el-option v-for="(value,key) in data.switchData.switchMap"
+                                       :label="key"
+                                       :value="parseInt(value)"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item v-if="item.type === 'date'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
+                        <el-date-picker
+                            v-model="data.formData[item.prop]"
+                            type="datetime"
+                            placeholder="Pick a day"
+                            format="YYYY-MM-DD HH:mm:ss"
+                            value-format="YYYY-MM-DD HH:mm:ss"
+                        />
                     </el-form-item>
                 </el-form>
                 <template #footer>

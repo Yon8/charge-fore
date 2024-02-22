@@ -65,7 +65,7 @@ watch(
     () => route.path,
     () => {
         let params = {
-            title: route.name,
+            title: route.meta.title,
             path: route.path,
             close: true,
         };

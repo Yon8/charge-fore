@@ -83,7 +83,7 @@ onMounted(()=>{
                   <el-icon><Avatar /></el-icon>
                   <span>充电站管理员管理</span>
               </el-menu-item>
-              <el-menu-item index="/">
+              <el-menu-item index="/stack">
                   <el-icon><SetUp /></el-icon>
                   <span>充电桩状态管理</span>
               </el-menu-item>
