@@ -69,15 +69,15 @@ const data = reactive({
         editUrl: '/chargeManage/station/stationEdit',
         deleteUrl: '/chargeManage/station/stationDelete?id=',
         deleteMoreUrl: '/chargeManage/station/stationDeleteByIds?ids=',
-        foreignUrl: '/chargeManage/station/getWardenIdAndName'
+        foreignUrl: {warden:'/chargeManage/station/getWardenIdAndName'}
     },
     switchData:{
-        switchMap: {
+        status: {
             '筹备中':'-1',
             '停业':'0',
             '开业':'1',
         },
-        formatter: formatStatus,
+        formatStatus,
     }
 });
 

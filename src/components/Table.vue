@@ -31,10 +31,7 @@ const props = defineProps({
     //前端处理 将属性数值转换为指定字段需要用到的数据
     switchData:{
         type: Object,
-        default: {
-            switchMap: {},
-            formatter: {},
-        },
+        default: {},
     }
 })
 const emit = defineEmits([])
@@ -246,26 +243,31 @@ const onCurrentChange = (val) => {
 }
 /*用于获取额外的数据 如与其他组件共有的外键Map*/
 const onForeign = () => {
-    axios.get(props.url.foreignUrl).then((res) => {
-        data.foreignData = res.data.result;
-        console.log(data.foreignData);
+    const foreign = props.url.foreignUrl
+    for (let key in foreign){
+        axios.get(foreign[key]).then((res) => {
+            data.foreignData[key] = res.data.result;
+            console.log(data.foreignData);
+        });
+    }
 
-    });
 }
 /*前端处理将值转换为字段的通用方法 */
 const onSwitch = () => {
+    console.log("switch运行了")
     //判断父组件是否需要用到此方法
-    if (typeof props.switchData.formatter === 'function') {
+    if (Object.keys(props.switchData).length !== 0) {
         data.tableData.forEach(row => {
             props.column.forEach((col) => {
                 //找到父组件是否有需要用到此方法的字段
                 if (col.type === 'switch') {
                     //将原字段经过处理后 增加Name变成新属性
-                    row[col.dialogProp+ "Name"] = props.switchData.formatter(row);
+                    row[col.dialogProp+ "Name"] = props.switchData['format' + col.dialogProp.charAt(0).toUpperCase() + col.dialogProp.slice(1)](row);
                 }
             })
         });
-        console.log("switch运行了")
+
+        console.log(data.tableData);
     }
 }
 </script>
@@ -315,15 +317,15 @@ const onSwitch = () => {
                     </el-form-item>
                     <el-form-item v-if="item.type === 'tag'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
                         <el-select v-model="data.formData[item.dialogProp]" :placeholder=getPlaceholder(item) style="width: 100%">
-                            <el-option v-for="item in data.foreignData"
-                                       :label="item.name"
-                                       :value="item.id"></el-option>
+                            <el-option v-for="foreign in data.foreignData[item.dialogProp]"
+                                       :label="foreign.name"
+                                       :value="foreign.id"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item v-if="item.type === 'switch'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
                         <el-select v-model="data.formData[item.dialogProp]" :placeholder=getPlaceholder(item) style="width: 100%">
                             <!-- parseInt(value) 修复类型不匹配导致对话框值显示不正常             -->
-                            <el-option v-for="(value,key) in data.switchData.switchMap"
+                            <el-option v-for="(value,key) in data.switchData[item.dialogProp]"
                                        :label="key"
                                        :value="parseInt(value)"></el-option>
                         </el-select>

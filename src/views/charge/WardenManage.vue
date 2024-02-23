@@ -67,14 +67,14 @@ const data = reactive({
         editUrl: '/chargeManage/warden/wardenEdit',
         deleteUrl: '/chargeManage/warden/wardenDelete?id=',
         deleteMoreUrl: '/chargeManage/warden/wardenDeleteByIds?ids=',
-        foreignUrl: '/chargeManage/warden/getStationIdAndName'
+        foreignUrl: {station:'/chargeManage/warden/getStationIdAndName'}
     },
     switchData:{
-        switchMap: {
+        authority: {
             '管理员':'0',
             '超级(跨站)管理员':'1',
         },
-        formatter: formatAuthority,
+        formatAuthority,
     }
 });
 </script>

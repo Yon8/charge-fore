@@ -100,16 +100,16 @@ const data = reactive({
         editUrl: '/chargeManage/stack/stackEdit',
         deleteUrl: '/chargeManage/stack/stackDelete?id=',
         deleteMoreUrl: '/chargeManage/stack/stackDeleteByIds?ids=',
-        foreignUrl: '/chargeManage/stack/getStationIdAndName'
+        foreignUrl: {station:'/chargeManage/stack/getStationIdAndName'}
     },
     switchData:{
-        switchMap: {
+        status: {
             '异常':'-1',
             '未充电':'0',
             '慢充':'1',
             '快充': '2' ,
         },
-        formatter: formatStatus,
+        formatStatus,
     }
 
 });

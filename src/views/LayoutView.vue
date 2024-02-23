@@ -87,15 +87,15 @@ onMounted(()=>{
                   <el-icon><SetUp /></el-icon>
                   <span>充电桩状态管理</span>
               </el-menu-item>
-              <el-menu-item index="/">
+              <el-menu-item index="/bill">
                   <el-icon><CreditCard /></el-icon>
                   <span>充电账单管理</span>
               </el-menu-item>
-              <el-menu-item index="/">
+              <el-menu-item index="/fault">
                   <el-icon><WarnTriangleFilled /></el-icon>
                   <span>故障管理</span>
               </el-menu-item>
-              <el-menu-item index="/">
+              <el-menu-item index="/user">
                   <el-icon><User /></el-icon>
                   <span>用户管理</span>
               </el-menu-item>
