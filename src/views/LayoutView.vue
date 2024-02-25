@@ -104,10 +104,10 @@ onMounted(()=>{
                       <el-icon><Tools /></el-icon>
                       <span>系统管理</span>
                   </template>
-                  <el-menu-item index="/">
+                  <el-menu-item index="/sysUser">
                       <el-icon><UserFilled /></el-icon>
                       <span>系统管理员</span></el-menu-item>
-                  <el-menu-item index="/">
+                  <el-menu-item index="/sysRole">
                       <el-icon><Avatar /></el-icon>
                       <span>角色管理</span></el-menu-item>
                   <el-menu-item index="/">

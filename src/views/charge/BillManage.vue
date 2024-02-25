@@ -58,13 +58,13 @@ const data = reactive({
             required:true
         },
         {
-            type: 'date',
+            type: 'datetime',
             label: '开始时间',
             prop: 'startTime',
             required: true,
         },
         {
-            type: 'date',
+            type: 'datetime',
             label: '结束时间',
             prop: 'endTime',
             required: true,

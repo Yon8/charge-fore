@@ -41,7 +41,7 @@ const data = reactive({
 
         },
         {
-            type: 'date',
+            type: 'datetime',
             label: '故障时间',
             prop: 'time',
             required: false,

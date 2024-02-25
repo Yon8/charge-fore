@@ -2,6 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/loginPage',
+    name: 'loginPage',
+    meta: { title: "布局" },
+    component: () => import('../views/LoginView.vue')
+  },
+  {
     path: '/',
     redirect: '/home'
   },
@@ -46,6 +52,16 @@ const routes = [
         name: "Fault",
         meta: { title: "故障管理" },
         component: () => import('../views/charge/FaultManage.vue')
+      }, {
+        path: "/sysUser",
+        name: "SysUser",
+        meta: { title: "系统管理员管理" },
+        component: () => import('../views/system/SysUserManage.vue')
+      }, {
+        path: "/sysRole",
+        name: "SysRole",
+        meta: { title: "系统角色管理" },
+        component: () => import('../views/system/SysRoleManage.vue')
       }
     ],
 

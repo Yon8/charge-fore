@@ -330,13 +330,22 @@ const onSwitch = () => {
                                        :value="parseInt(value)"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="item.type === 'date'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
+                    <el-form-item v-if="item.type === 'datetime'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
                         <el-date-picker
                             v-model="data.formData[item.prop]"
                             type="datetime"
                             placeholder="Pick a day"
                             format="YYYY-MM-DD HH:mm:ss"
                             value-format="YYYY-MM-DD HH:mm:ss"
+                        />
+                    </el-form-item>
+                    <el-form-item v-if="item.type === 'date'" :prop="item.prop" :label="item.label" :rules="[{ required: item.required, message: '请输入类型', trigger: 'blur' }]">
+                        <el-date-picker
+                            v-model="data.formData[item.prop]"
+                            type="date"
+                            placeholder="Pick a day"
+                            format="YYYY-MM-DD"
+                            value-format="YYYY-MM-DD"
                         />
                     </el-form-item>
                 </el-form>
