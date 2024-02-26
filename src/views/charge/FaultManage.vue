@@ -95,7 +95,7 @@ const data = reactive({
         editUrl: '/chargeManage/fault/faultEdit',
         deleteUrl: '/chargeManage/fault/faultDelete?id=',
         deleteMoreUrl: '/chargeManage/fault/faultDeleteByIds?ids=',
-        foreignUrl: {stack:'/chargeManage/fault/getStackIdAndName'}
+        foreignUrl: {stack:'/chargeManage/stack/getStackIdAndName'}
     },
     switchData:{
         status: {

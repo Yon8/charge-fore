@@ -67,7 +67,7 @@ const data = reactive({
         editUrl: '/chargeManage/warden/wardenEdit',
         deleteUrl: '/chargeManage/warden/wardenDelete?id=',
         deleteMoreUrl: '/chargeManage/warden/wardenDeleteByIds?ids=',
-        foreignUrl: {station:'/chargeManage/warden/getStationIdAndName'}
+        foreignUrl: {station:'/chargeManage/station/getStationIdAndName'}
     },
     switchData:{
         authority: {

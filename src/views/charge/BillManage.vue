@@ -132,9 +132,9 @@ const data = reactive({
         deleteUrl: '/chargeManage/bill/billDelete?id=',
         deleteMoreUrl: '/chargeManage/bill/billDeleteByIds?ids=',
         foreignUrl: {
-            station:'/chargeManage/bill/getStationIdAndName',
-            user: '/chargeManage/bill/getUserIdAndName',
-            stack:'/chargeManage/bill/getStackIdAndName'
+            station:'/chargeManage/station/getStationIdAndName',
+            user: '/chargeManage/user/getUserIdAndName',
+            stack:'/chargeManage/stack/getStackIdAndName'
         },
     },
     switchData:{

@@ -100,7 +100,7 @@ const data = reactive({
         editUrl: '/chargeManage/stack/stackEdit',
         deleteUrl: '/chargeManage/stack/stackDelete?id=',
         deleteMoreUrl: '/chargeManage/stack/stackDeleteByIds?ids=',
-        foreignUrl: {station:'/chargeManage/stack/getStationIdAndName'}
+        foreignUrl: {station:'/chargeManage/station/getStationIdAndName'}
     },
     switchData:{
         status: {
