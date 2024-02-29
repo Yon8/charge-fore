@@ -62,6 +62,11 @@ const routes = [
         name: "SysRole",
         meta: { title: "系统角色管理" },
         component: () => import('../views/system/SysRoleManage.vue')
+      }, {
+        path: "/loginRecord",
+        name: "LoginRecord",
+        meta: { title: "登录日志" },
+        component: () => import('../views/system/LoginRecordManage.vue')
       }
     ],
 

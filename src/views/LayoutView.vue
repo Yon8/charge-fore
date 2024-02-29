@@ -110,7 +110,7 @@ onMounted(()=>{
                   <el-menu-item index="/sysRole">
                       <el-icon><Avatar /></el-icon>
                       <span>角色管理</span></el-menu-item>
-                  <el-menu-item index="/">
+                  <el-menu-item index="/loginRecord">
                       <el-icon><Platform /></el-icon>
                       <span>登录日志</span></el-menu-item>
               </el-sub-menu>
