@@ -17,6 +17,7 @@ Object.keys(Icons).forEach((key)=>{
     app.component(key,Icons[key])
 })
 app.use(ElementPlus).use(store)
+
 app.mount('#app')
 app.config.globalProperties.$imageUrl ="http://localhost:8089/charge"
 //设置axios默认Url地址前缀

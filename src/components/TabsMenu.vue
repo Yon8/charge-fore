@@ -2,12 +2,14 @@
 import {useRoute, useRouter} from "vue-router";
 import {onMounted, reactive, toRefs, watch} from "vue";
 import {HOME_URL, TABS_BLACK_LIST} from "@/config/config";
+import {useMenuStore} from "@/store/settings";
 
 const route = useRoute();
 const router = useRouter();
 onMounted(()=>{
 
 })
+const menuStore = useMenuStore();
 const data = reactive({
     tabsMenuValue: HOME_URL,
     tabsMenuList: [{
@@ -45,8 +47,8 @@ const data = reactive({
         data.tabsMenuList = _tabMenuList.filter(item => item.path !== tabItem);
     },
     onCloseCurrentTab: ()=>{
-        // if (data.tabsMenuValue === HOME_URL) return;
-        // onTabMenuRemove(state.tabsMenuValue); //有错误
+        if (data.tabsMenuValue === HOME_URL) return;
+        data.onTabMenuRemove(menuStore.getMenu);
     },
     onCloseOtherTab: () => {
         data.tabsMenuList = data.tabsMenuList.filter(item => {
@@ -67,8 +69,10 @@ watch(
         let params = {
             title: route.meta.title,
             path: route.path,
+            icon: route.meta.icon,
             close: true,
         };
+        menuStore.setMenu(params.path)
         data.onAddTabMenu(params);
     },
     {immediate: true}

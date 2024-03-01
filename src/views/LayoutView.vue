@@ -1,16 +1,25 @@
 <script setup>
-import {onBeforeMount, onMounted, reactive} from "vue";
+import {onBeforeMount, onMounted, reactive, watch} from "vue";
   import TabsMenu from "@/components/TabsMenu.vue";
 import {timeFormate} from "@/utils/utils";
 import {ArrowDown} from "@element-plus/icons-vue";
+import {useTokenStore, useUserStore} from "@/store/settings";
+import router from "@/router";
 
   const data =reactive({
       nowTimes: "",
       isCollapse: false,
       asideWidth: '200px',
       defaultHeight: null,
-      userName: "admin",
+      username: "未登录用户",
       sysName: "电动汽车充电桩管理系统",
+  })
+  const userStore = useUserStore();
+  const tokenStore = useTokenStore();
+  watch(() => userStore.username,(newUsername) => {
+      data.username = newUsername || "未登录用户";
+  },{
+      immediate: true, // 立即执行一次watch函数，以确保初始值被设置
   })
   const onCollapse = () =>{
       if (data.isCollapse) {
@@ -23,7 +32,14 @@ import {ArrowDown} from "@element-plus/icons-vue";
       }
   }
   const onLogout = () => {
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+      userStore.delUser();
+      tokenStore.delToken();
 
+      router.push({
+          path: '/loginPage'
+      })
   };
 const onNowTimes = () => {
     setInterval(() => {
@@ -39,6 +55,7 @@ onBeforeMount(() =>{
 onMounted(()=>{
     onNowTimes();
     window.addEventListener('resize', onDefaultHeight);
+    data.username = userStore.getUser.username;
 })
 </script>
 
@@ -127,11 +144,13 @@ onMounted(()=>{
                             <Van />
                         </el-icon>
                         <span style="padding-left: 20px;vertical-align: middle; font-weight: bold; font-size: 1.5em;">{{data.sysName}}</span>
+                        <span style="padding-left: 50px;vertical-align: middle;  font-size: 1.0em;">{{ data.nowTimes}} </span>
                     </div>
                     <div style="padding-right:0.4rem;">
+
                         <el-dropdown style="line-height: 60px;">
                     <span class="el-dropdown-link" style="color:var(--theme);">
-                        <span style="cursor:pointer;vertical-align: middle;">Welcome: {{data.userName}} </span>
+                        <span style="cursor:pointer;vertical-align: middle;">欢迎您: {{ data.username }} </span>
                         <el-icon style="vertical-align: middle;"><arrow-down /></el-icon>
                     </span>
                             <template #dropdown>

@@ -3,20 +3,22 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
     state: () => ({
         username: '',
-        loginTime: '',
         id: '',
     }),
     getters: {
         getUser() {
             if (!this.username) {
                 let user = JSON.parse(sessionStorage.getItem('user'))
-                this.username = user.username
-                this.loginTime = user.loginTime
-                this.id = user.id
+                if (user){
+                    this.username = user.username
+                    this.id = user.id
+                }else {
+                    this.username = "未登录用户"
+                    this.id = "0"
+                }
             }
             return {
                 username: this.username,
-                loginTime: this.loginTime,
                 id: this.id,
             }
         }
@@ -24,19 +26,16 @@ export const useUserStore = defineStore('user', {
     actions: {
         setUser(data) {
             this.username = data.username
-            this.loginTime = data.loginTime
             this.id = data.id
 
             sessionStorage.setItem('user', JSON.stringify({
                 username: data.username,
-                loginTime: data.loginTime,
                 id: data.id
             }))
         },
         delUser() {
             sessionStorage.removeItem('user')
             this.username = ''
-            this.loginTime = ''
             this.id = ''
         }
     }
